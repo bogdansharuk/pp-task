@@ -13,10 +13,10 @@ usermod -aG docker ubuntu
 ### Generate nginx whitelist
 mkdir -p /home/ubuntu/nginx/
 wget https://ip-ranges.amazonaws.com/ip-ranges.json -O /tmp/aws-ip-ranges.json
-jq -r '.prefixes[] | select(.service=="EC2" or .service=="CLOUDFRONT") | .ip_prefix' < /tmp/aws-ip-ranges.json > /tmp/aws-ip-ranges-filtered.txt
+cat /tmp/aws-ip-ranges.json | jq -r '.prefixes[] | select(.service=="EC2" or .service=="CLOUDFRONT") | .ip_prefix' | sort | uniq > /tmp/aws-ip-ranges-filtered.txt
 echo "### Set real IP header" > /home/ubuntu/nginx/nginx-aws-whitelist.conf
 echo "real_ip_header X-Forwarded-For;" >> /home/ubuntu/nginx/nginx-aws-whitelist.conf
-echo "real_ip_recursive off;" >> /home/ubuntu/nginx/nginx-aws-whitelist.conf
+echo "real_ip_recursive on;" >> /home/ubuntu/nginx/nginx-aws-whitelist.conf
 echo "set_real_ip_from 10.10.0.0/16;" >> /home/ubuntu/nginx/nginx-aws-whitelist.conf
 echo "### Allow ALB traffic" >> /home/ubuntu/nginx/nginx-aws-whitelist.conf
 echo "allow 10.10.0.0/16;" >> /home/ubuntu/nginx/nginx-aws-whitelist.conf

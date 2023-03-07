@@ -22,7 +22,7 @@ resource "aws_instance" "instance_1" {
   key_name               = "${var.project_name}-ssh-key"
   vpc_security_group_ids = [aws_security_group.web.id]
   subnet_id              = aws_subnet.subnet_public_1.id
-  user_data              = file("user_data.sh")
+  user_data              = file("user_data/entrypoint.sh")
   tags = {
     Name = "${var.project_name}-1"
   }
@@ -34,7 +34,7 @@ resource "aws_instance" "instance_2" {
   key_name               = "${var.project_name}-ssh-key"
   vpc_security_group_ids = [aws_security_group.web.id]
   subnet_id              = aws_subnet.subnet_public_2.id
-  user_data              = file("user_data.sh")
+  user_data              = file("user_data/entrypoint.sh")
   tags = {
     Name = "${var.project_name}-2"
   }
